@@ -12,6 +12,11 @@ public class Company {
     @SerializedName("company_name")
     public String companyName;
 
+    public Company(String id, String companyName) {
+        this.id = id;
+        this.companyName = companyName;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
