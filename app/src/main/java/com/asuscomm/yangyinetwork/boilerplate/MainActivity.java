@@ -32,18 +32,5 @@ public class MainActivity extends AppCompatActivity {
                 = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         binding.setMainviewmodel(mViewModel);
-
-        CompanyService service = RetrofitClients.getInstance().getService(CompanyService.class);
-        service.getCompanies().enqueue(new Callback<List<Company>>() {
-            @Override
-            public void onResponse(Call<List<Company>> call, Response<List<Company>> response) {
-                Log.d(TAG, "onResponse: ");
-            }
-
-            @Override
-            public void onFailure(Call<List<Company>> call, Throwable t) {
-                Log.d(TAG, "onFailure: ");
-            }
-        });
     }
 }
