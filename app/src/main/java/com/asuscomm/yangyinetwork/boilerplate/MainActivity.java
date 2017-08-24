@@ -14,6 +14,7 @@ import android.widget.SpinnerAdapter;
 
 import com.asuscomm.yangyinetwork.boilerplate.databinding.ActivityMainBinding;
 import com.asuscomm.yangyinetwork.boilerplate.domain.Company;
+import com.asuscomm.yangyinetwork.boilerplate.domain.Product;
 import com.asuscomm.yangyinetwork.boilerplate.network.CompanyService;
 import com.asuscomm.yangyinetwork.boilerplate.network.RetrofitClients;
 import com.asuscomm.yangyinetwork.boilerplate.viewmodel.MainViewModel;
@@ -45,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
                         this,
                         R.layout.main_spinner_companyitem,
                         new ArrayList<Company>()
+                ));
+
+        mBinding.spinnerProducts.setAdapter(
+                new ArrayAdapter<Product>(
+                        this,
+                        R.layout.main_spinner_productitem,
+                        new ArrayList<Product>()
                 ));
     }
 

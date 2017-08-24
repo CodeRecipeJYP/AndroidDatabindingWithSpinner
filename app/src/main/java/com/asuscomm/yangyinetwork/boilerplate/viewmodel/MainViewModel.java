@@ -34,6 +34,10 @@ public class MainViewModel extends ViewModel {
     public ObservableField<List<Company>> mCompanies = new ObservableField<>(new ArrayList<>());
     @NonNull
     public ObservableField<Boolean> mCompaniesProgress = new ObservableField<>(false);
+    @NonNull
+    public ObservableField<List<Product>> mProducts = new ObservableField<>(new ArrayList<>());
+    @NonNull
+    public ObservableField<Boolean> mProductsProgress = new ObservableField<>(false);
 
     @NonNull
     private CompositeDisposable mDisposables = new CompositeDisposable();
@@ -59,6 +63,9 @@ public class MainViewModel extends ViewModel {
 
     private void onItemSelected(@NonNull Company company) {
         Log.d(TAG, "onItemSelected() called with: company = [" + company + "]");
+
+        mProductsProgress.set(true);
+
         ProductService service = RetrofitClients.getInstance().getService(ProductService.class);
         service.getProducts(company.id).enqueue(new Callback<List<Product>>() {
             @Override
@@ -67,6 +74,8 @@ public class MainViewModel extends ViewModel {
                     List<Product> products = response.body();
                     Log.d(TAG, "onResponse() called with: " +
                             "products = [" + products.toString() + "]");
+                    mProductsProgress.set(false);
+                    mProducts.set(products);
                 } else {
                     Log.d(TAG, "onResponse: is not successful");
                 }
