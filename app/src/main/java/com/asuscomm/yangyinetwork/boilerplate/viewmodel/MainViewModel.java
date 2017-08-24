@@ -1,6 +1,7 @@
 package com.asuscomm.yangyinetwork.boilerplate.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
+import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,10 +18,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by jaeyoung on 8/22/17.
- */
-
 public class MainViewModel extends ViewModel {
     private static final String TAG = "MainViewModel";
 
@@ -29,12 +26,29 @@ public class MainViewModel extends ViewModel {
     @NonNull
     public ObservableField<Boolean> mTitleProgress = new ObservableField<>(false);
     @NonNull
-    public ObservableField<List<Company>> mCompanies = new ObservableField<List<Company>>(new ArrayList<>());
+    public ObservableField<List<Company>> mCompanies = new ObservableField<>(new ArrayList<>());
     @NonNull
     public ObservableField<Boolean> mCompaniesProgress = new ObservableField<>(false);
 
+    @NonNull
+    public ObservableField<Integer> mSelectedCompanyPosition = new ObservableField<>();
+
     public MainViewModel() {
         loadData();
+        mSelectedCompanyPosition.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+//                Log.d(TAG, "onPropertyChanged() called with: " +
+//                        "mSelectedCompanyPosition = [" + mSelectedCompanyPosition.get() + "]");
+                List<Company> companies = mCompanies.get();
+                Company company = companies.get(mSelectedCompanyPosition.get());
+                onItemSelected(company);
+            }
+        });
+    }
+
+    private void onItemSelected(@NonNull Company company) {
+        Log.d(TAG, "onItemSelected() called with: company = [" + company + "]");
     }
 
     private void loadData() {
