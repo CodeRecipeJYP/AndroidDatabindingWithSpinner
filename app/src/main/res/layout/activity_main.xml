@@ -46,6 +46,7 @@
             android:id="@+id/spinner_products"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="@{mainviewmodel.mProductsSpinnerVisibility ? View.VISIBLE : View.GONE}"
             android:entries="@{mainviewmodel.mProducts}"
             />
 

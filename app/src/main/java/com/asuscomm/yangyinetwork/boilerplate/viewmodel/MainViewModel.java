@@ -37,6 +37,8 @@ public class MainViewModel extends ViewModel {
     @NonNull
     public ObservableField<List<Product>> mProducts = new ObservableField<>(new ArrayList<>());
     @NonNull
+    public ObservableField<Boolean> mProductsSpinnerVisibility = new ObservableField<>(false);
+    @NonNull
     public ObservableField<Boolean> mProductsProgress = new ObservableField<>(false);
 
     @NonNull
@@ -65,6 +67,7 @@ public class MainViewModel extends ViewModel {
         Log.d(TAG, "onItemSelected() called with: company = [" + company + "]");
 
         mProductsProgress.set(true);
+        mProductsSpinnerVisibility.set(false);
 
         ProductService service = RetrofitClients.getInstance().getService(ProductService.class);
         service.getProducts(company.id).enqueue(new Callback<List<Product>>() {
@@ -76,6 +79,7 @@ public class MainViewModel extends ViewModel {
                             "products = [" + products.toString() + "]");
                     mProductsProgress.set(false);
                     mProducts.set(products);
+                    mProductsSpinnerVisibility.set(true);
                 } else {
                     Log.d(TAG, "onResponse: is not successful");
                 }
