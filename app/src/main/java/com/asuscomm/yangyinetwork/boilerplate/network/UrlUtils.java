@@ -12,8 +12,8 @@ public class UrlUtils {
     static {
         urls = new HashMap<>();
 
-//        String apiUrl = "http://52.79.142.130/";
-//        urls.put(RoutineService.class.getName(), apiUrl);
+        String apiUrl = "http://13.124.172.12:3000/";
+        urls.put(CompanyService.class.getName(), apiUrl);
     }
 
     public static String getUrlWithClassName(String clsName) {
