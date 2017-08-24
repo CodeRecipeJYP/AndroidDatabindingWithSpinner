@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
         mBinding.spinnerCompanies.setAdapter(
                 new ArrayAdapter<Company>(
                         this,

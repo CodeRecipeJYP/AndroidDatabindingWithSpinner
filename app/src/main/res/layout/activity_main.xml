@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View"/>
         <variable
             name="mainviewmodel"
             type="com.asuscomm.yangyinetwork.boilerplate.viewmodel.MainViewModel"/>
@@ -18,6 +19,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:text="@{mainviewmodel.mTitle}"
+            />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@android:style/Widget.ProgressBar.Large"
+            android:visibility="@{mainviewmodel.mTitleProgress ? View.VISIBLE : View.GONE}"
             />
 
         <Spinner

@@ -27,7 +27,11 @@ public class MainViewModel extends ViewModel {
     @NonNull
     public ObservableField<String> mTitle = new ObservableField<>("initial");
     @NonNull
+    public ObservableField<Boolean> mTitleProgress = new ObservableField<>(false);
+    @NonNull
     public ObservableField<List<Company>> mCompanies = new ObservableField<List<Company>>(new ArrayList<>());
+    @NonNull
+    public ObservableField<Boolean> mCompaniesProgress = new ObservableField<>(false);
 
     public MainViewModel() {
         loadData();
@@ -41,6 +45,8 @@ public class MainViewModel extends ViewModel {
         companies.add(new Company("2", "initialCompany2"));
         mCompanies.set(companies);
 
+        mCompaniesProgress.set(true);
+        mTitleProgress.set(true);
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {
@@ -53,6 +59,8 @@ public class MainViewModel extends ViewModel {
                     if (response.isSuccessful()) {
                         mTitle.set(response.body().toString());
                         mCompanies.set(response.body());
+                        mCompaniesProgress.set(false);
+                        mTitleProgress.set(false);
                     } else {
                         Log.d(TAG, "onResponse: is not successful");
                     }
