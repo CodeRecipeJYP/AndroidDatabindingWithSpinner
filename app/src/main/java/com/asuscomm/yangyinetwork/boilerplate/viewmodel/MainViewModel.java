@@ -7,15 +7,18 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.asuscomm.yangyinetwork.boilerplate.databinding.ActivityMainBinding;
 import com.asuscomm.yangyinetwork.boilerplate.domain.Company;
 import com.asuscomm.yangyinetwork.boilerplate.domain.Product;
 import com.asuscomm.yangyinetwork.boilerplate.network.CompanyService;
 import com.asuscomm.yangyinetwork.boilerplate.network.ProductService;
 import com.asuscomm.yangyinetwork.boilerplate.network.RetrofitClients;
+import com.jakewharton.rxbinding2.widget.RxAdapterView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,20 +36,25 @@ public class MainViewModel extends ViewModel {
     public ObservableField<Boolean> mCompaniesProgress = new ObservableField<>(false);
 
     @NonNull
-    public ObservableField<Integer> mSelectedCompanyPosition = new ObservableField<>();
+    private CompositeDisposable mDisposables = new CompositeDisposable();
 
     public MainViewModel() {
         loadData();
-        mSelectedCompanyPosition.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-//                Log.d(TAG, "onPropertyChanged() called with: " +
-//                        "mSelectedCompanyPosition = [" + mSelectedCompanyPosition.get() + "]");
-                List<Company> companies = mCompanies.get();
-                Company company = companies.get(mSelectedCompanyPosition.get());
-                onItemSelected(company);
-            }
-        });
+    }
+
+    public void attachViews(ActivityMainBinding binding) {
+        Log.d(TAG, "attachViews: ");
+        mDisposables.add(
+                RxAdapterView.itemSelections(binding.spinnerCompanies)
+                        .subscribe((position) -> {
+                            Log.d(TAG, "itemSelections called with: position = [" + position + "]");
+                            List<Company> companies = mCompanies.get();
+                            if (position > -1 && position < companies.size()) {
+                                Company company = companies.get(position);
+                                onItemSelected(company);
+                            }
+                        })
+        );
     }
 
     private void onItemSelected(@NonNull Company company) {
@@ -59,6 +67,8 @@ public class MainViewModel extends ViewModel {
                     List<Product> products = response.body();
                     Log.d(TAG, "onResponse() called with: " +
                             "products = [" + products.toString() + "]");
+                } else {
+                    Log.d(TAG, "onResponse: is not successful");
                 }
             }
 
@@ -72,10 +82,6 @@ public class MainViewModel extends ViewModel {
     private void loadData() {
         Log.d(TAG, "loadData: ");
         mTitle.set("initial");
-//        ArrayList<Company> companies = new ArrayList<>();
-//        companies.add(new Company("1", "initialCompany1"));
-//        companies.add(new Company("2", "initialCompany2"));
-//        mCompanies.set(companies);
 
         mCompaniesProgress.set(true);
         mTitleProgress.set(true);
@@ -104,5 +110,11 @@ public class MainViewModel extends ViewModel {
                 }
             });
         }, 3000);
+    }
+
+    @Override
+    protected void onCleared() {
+        mDisposables.dispose();
+        super.onCleared();
     }
 }

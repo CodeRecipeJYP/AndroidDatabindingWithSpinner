@@ -32,7 +32,6 @@
             android:id="@+id/spinner_companies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:selectedItemPosition="@={mainviewmodel.mSelectedCompanyPosition}"
             android:entries="@{mainviewmodel.mCompanies}"
             />
 

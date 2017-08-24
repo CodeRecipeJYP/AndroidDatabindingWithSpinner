@@ -42,4 +42,5 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha5"
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 }
