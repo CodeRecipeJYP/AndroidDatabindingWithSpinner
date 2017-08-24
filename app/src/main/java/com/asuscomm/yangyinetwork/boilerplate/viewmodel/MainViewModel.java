@@ -8,7 +8,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.asuscomm.yangyinetwork.boilerplate.domain.Company;
+import com.asuscomm.yangyinetwork.boilerplate.domain.Product;
 import com.asuscomm.yangyinetwork.boilerplate.network.CompanyService;
+import com.asuscomm.yangyinetwork.boilerplate.network.ProductService;
 import com.asuscomm.yangyinetwork.boilerplate.network.RetrofitClients;
 
 import java.util.ArrayList;
@@ -49,15 +51,31 @@ public class MainViewModel extends ViewModel {
 
     private void onItemSelected(@NonNull Company company) {
         Log.d(TAG, "onItemSelected() called with: company = [" + company + "]");
+        ProductService service = RetrofitClients.getInstance().getService(ProductService.class);
+        service.getProducts(company.id).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful()) {
+                    List<Product> products = response.body();
+                    Log.d(TAG, "onResponse() called with: " +
+                            "products = [" + products.toString() + "]");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d(TAG, "onFailure: ");
+            }
+        });
     }
 
     private void loadData() {
         Log.d(TAG, "loadData: ");
         mTitle.set("initial");
-        ArrayList<Company> companies = new ArrayList<>();
-        companies.add(new Company("1", "initialCompany1"));
-        companies.add(new Company("2", "initialCompany2"));
-        mCompanies.set(companies);
+//        ArrayList<Company> companies = new ArrayList<>();
+//        companies.add(new Company("1", "initialCompany1"));
+//        companies.add(new Company("2", "initialCompany2"));
+//        mCompanies.set(companies);
 
         mCompaniesProgress.set(true);
         mTitleProgress.set(true);

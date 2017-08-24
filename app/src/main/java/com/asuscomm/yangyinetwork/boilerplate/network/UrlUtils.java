@@ -14,6 +14,7 @@ public class UrlUtils {
 
         String apiUrl = "http://13.124.172.12:3000/";
         urls.put(CompanyService.class.getName(), apiUrl);
+        urls.put(ProductService.class.getName(), apiUrl);
     }
 
     public static String getUrlWithClassName(String clsName) {
