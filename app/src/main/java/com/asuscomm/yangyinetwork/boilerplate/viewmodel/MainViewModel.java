@@ -69,27 +69,31 @@ public class MainViewModel extends ViewModel {
         mProductsProgress.set(true);
         mProductsSpinnerVisibility.set(false);
 
-        ProductService service = RetrofitClients.getInstance().getService(ProductService.class);
-        service.getProducts(company.id).enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    List<Product> products = response.body();
-                    Log.d(TAG, "onResponse() called with: " +
-                            "products = [" + products.toString() + "]");
-                    mProductsProgress.set(false);
-                    mProducts.set(products);
-                    mProductsSpinnerVisibility.set(true);
-                } else {
-                    Log.d(TAG, "onResponse: is not successful");
-                }
-            }
+        Handler handler = new Handler();
+        handler.postDelayed(
+                () -> {
+                    ProductService service = RetrofitClients.getInstance().getService(ProductService.class);
+                    service.getProducts(company.id).enqueue(new Callback<List<Product>>() {
+                        @Override
+                        public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                            if (response.isSuccessful()) {
+                                List<Product> products = response.body();
+                                Log.d(TAG, "onResponse() called with: " +
+                                        "products = [" + products.toString() + "]");
+                                mProductsProgress.set(false);
+                                mProducts.set(products);
+                                mProductsSpinnerVisibility.set(true);
+                            } else {
+                                Log.d(TAG, "onResponse: is not successful");
+                            }
+                        }
 
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d(TAG, "onFailure: ");
-            }
-        });
+                        @Override
+                        public void onFailure(Call<List<Product>> call, Throwable t) {
+                            Log.d(TAG, "onFailure: ");
+                        }
+                    });
+                }, 2000);
     }
 
     private void loadData() {
